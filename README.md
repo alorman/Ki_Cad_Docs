@@ -5,7 +5,6 @@ If you have improvements or changes, please feel free to open a PR.
 
 [Using Rhino with KiCad](/using_rhino_with_kicad)
 [![](images/rhino_kicad.svg)](/using_rhino_with_kidcad)
-![Using Rhino with KiCad](images/rhino_kicad.svg)
 
 [Using Illustrator with KiCad](/using_illustrator_with_kicad)
 [![](images/ai_kicad.svg)](/using_illustrator_with_kicad)
