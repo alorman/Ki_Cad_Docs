@@ -128,7 +128,7 @@ In my limited testing I've found the following:
 - Fills and hatches seem inconsistent and do not yeild easily to attempts at repair.
 - Altium is quite expensive (~$3,000/seat/year)
 
-## [KiCad](www.kicad.org)
+## [KiCad](www.kicad.org) Methods
 As with a lot of software, there is more than one way to skin a cat (just a phrase. I love cats). I will outline all the methods I tried that **didn't** work in addition to the final one that did. 
 
 ### KiCad Convert Image Tool
@@ -138,6 +138,8 @@ This is KiCad's built-in method for converting raster art to footprints and logo
 **Limitations**
 - **This tool will not place an object onto the copper, paste or mask layers** (this rules it out for what I want to do)
 - It is DPI dependent, rely on rasters for input. For a large board you will end up with inaccuracies or lost detail.
+- This is what you end up with, for large and detailed artwork: ![](images/too_low_dpi.PNG)
+- It should look like: ![](images/footprint_editor.PNG)
 
 ### [SVG Path to Kicad Online](http://kicad.feldoncentral.com/svg2kicad/svg2kicad.php)
 I tried this but couldn't make it work with SVGs coming out of Illustrator, due to Illustrator and Inkscape having very different ideas about how to handle SVGs.
