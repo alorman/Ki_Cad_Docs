@@ -21,7 +21,7 @@ Your mileage may vary, but I will share what did and didn't work.
 ## A Bit About SVGs
 SVGs are not all created equal. Illustrator and [Rhino](www.rhino3d.com) seem to be largely compatible in their handling of SVGs (although Rhino does not acknowle line width, which is odd). Inkscape very much *does NOT* treat these the same way.   
 **SVGs cannot contain layers.** But instead contain groups (which can be mapped roughly from layers to groups when exporting from Rhino or Illustrator). Rhino treats these as native groups:
-![](/images/svg_groups.PNG)
+![](images/svg_groups.PNG)
 
 The group name is embedded in the SVG as the following:
 ```
@@ -132,7 +132,7 @@ In my limited testing I've found the following:
 As with a lot of software, there is more than one way to skin a cat (just a phrase. I love cats). I will outline all the methods I tried that **didn't** work in addition to the final one that did. 
 
 ### KiCad Convert Image Tool
-![](/images/convert_image.PNG)
+![](images/convert_image.PNG)
 This is KiCad's built-in method for converting raster art to footprints and logos. It produces a `kicad_mod` file that can be placed in a custom library.
 
 **Limitations**
@@ -200,18 +200,18 @@ Follow your OS-specific instructions on [Gerbolyze Website](https://github.com/j
 	|        Edge.Cuts       |                    Edge Cuts (Outline in Altium)                   |
   - You can have additional layer names, but they will be ignored (as long as the `-sexp-layer` isn't thrown). 
 - Your Illustrator layer panel should look something like this:
-  ![](/images/illustrator_layers.PNG]
+  ![](images/illustrator_layers.PNG]
 - Place the suitable art on each layer. Color does not appear to matter.
 - You don't need to use the `Pathfinder > Union` tool to join all the paths, and you don't need to `Expand` all artwork
-- Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](/images/export_for_screens.PNG)
+- Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](images/export_for_screens.PNG)
 - Transfer the resulting SVG via sFTP or similar to your VM or Raspi
 - Run `svg-flatten --format kicad --sexp-mod-name TestModule3 --no-flatten /home/pi/name_of_svg.svg /home/pi/name_of_kidcad_file.kicad_mod`
   - Explanation:
     - `--Format kicad` specifies that you'd like the resultant file in kicad_mod type
 	- `--sexp-mod-name` specifies the module reference in KiCad. This seems like it can be arbitrary and not globally unique, but **must** be specified. For manifestation in KiCad see: ![](test_module_3.PNG)
 	- `--no-flatten` this disables the flattening algorithm. This is largely similar to doing the `Pathfinder > Union` command in Illustrator or the `booleancurve` command in Rhino. **When this flag wasn't thrown, svg-flatten` would run but produce a 1k file containing  nothing.** Through anecdotal testing in KiCad, it seems that even un-unioned artwork imports well. 
-	  - Un-unioned art in Illustrator: ![](/images/illustrator_unmerged.PNG)
-	  - Imported through this process to KiCad. It has created the same overlapping areas on layer `F.SilkS`. Most fab shops should be fine with this overlap: ![](/images/footprint_editor.PNG)
+	  - Un-unioned art in Illustrator: ![](images/illustrator_unmerged.PNG)
+	  - Imported through this process to KiCad. It has created the same overlapping areas on layer `F.SilkS`. Most fab shops should be fine with this overlap: ![](images/footprint_editor.PNG)
 	- You could always union the artwork in pre-processing.
 - Now that we have the resultant `myfile.kidcad_mod` file, transfer it back to your working KiCad directory.
 - Add this as a custom footprint location per [directions from KiCad](https://forum.kicad.info/t/library-management-in-kicad-version-5/14636)
