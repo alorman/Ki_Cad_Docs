@@ -143,7 +143,12 @@ This is KiCad's built-in method for converting raster art to footprints and logo
 I tried this but couldn't make it work with SVGs coming out of Illustrator, due to Illustrator and Inkscape having very different ideas about how to handle SVGs.
 
 ### [img2mod](http://img2mod.wayneandlayne.com/)
+This is a web-based tool for converting small raster images to kicad_mod files. 
+While it looks simple and like it could be a good solution for small rasters (like QR codes) it fell flat for the work I'm trying to do.  
 
+**Limitations**
+- Raster input
+- Unclear how large a file you can throw at it
 
 ### [PCBmodE](https://boldport.com/pcbmode)
 PCBmodE is a fully featured PCB design suite (although I haven't spent any time using it yet) that looks to have promising possibilities.  
@@ -154,7 +159,7 @@ I didn't fully explore this option because it seemed to rely on Inkscape SVGs. S
 **Limitations**
 Reliant on Inkscape's layers, which are a pain/somewhat-impossible to transfer easily from Illustrator.
 
-### Plugin SVG2Shenzhen
+### [Plugin SVG2Shenzhen](https://github.com/badgeek/svg2shenzhen)
 As stated above, if you have deep knowledge of Inkscape, or the majority of your art is native to it, this tool could work well for you. In my testing, I discovered a few subtle but show-stopping problems.
 
 **Method**
