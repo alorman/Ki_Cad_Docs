@@ -5,4 +5,4 @@ If you have improvements or changes, please feel free to open a PR.
 
 [Using Rhino with KiCad](/using_rhino_with_kicad)
 
-[Using Illustrator with KiCad](/uing_illustrator_with_kicad)
+[Using Illustrator with KiCad](/using_illustrator_with_kicad)
