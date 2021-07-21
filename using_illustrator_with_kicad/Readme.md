@@ -104,7 +104,7 @@ I've used and tried the following to make arbitrary vector art PCBs.
   - Install this font in windows  
   - Insert each layer (i.e. Top Copper, Top Mask, Top Silk) as a text object in CircuitMaker, specifying the correct font and letter, then assigning to the correct layer.
 
-** The ability to import DWG/DXFs has been broken in CircuitMaker 2.0+. This seems to be the only option if you must use CircuitMaker**
+**The ability to import DWG/DXFs has been broken in CircuitMaker 2.0+. This seems to be the only option if you must use CircuitMaker**
 
 **Pros**
 - It worked. With patience this was a workable solution in CircuitMaker, since their DWG import was never particularly good.
