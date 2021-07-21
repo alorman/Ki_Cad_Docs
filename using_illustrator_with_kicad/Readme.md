@@ -1,7 +1,7 @@
 # Using Illustrator (and other vector drawing tools) with KiCad
 
 ## TL;DR
-[Jump to the important bits](#gerbolyze)
+[Jump to the important bits](#gerbolyze-the-winning-solution)
 
 ## Why This Guide?
 This outline is drawn from days of frustration trying to move a complicated set of vector art and traces into KiCad for final wiring and production.  
@@ -215,7 +215,7 @@ Follow your OS-specific instructions on [Gerbolyze Website](https://github.com/j
 	- You could always union the artwork in pre-processing.
 - Now that we have the resultant `myfile.kidcad_mod` file, transfer it back to your working KiCad directory.
 - Add this as a custom footprint location per [directions from KiCad](https://forum.kicad.info/t/library-management-in-kicad-version-5/14636)
-- Place the footprint in PCBnew and admire your gorgeous vectors: ![](/images/gorgeous_vectors.PNG)
+- Place the footprint in PCBnew and admire your gorgeous vectors: ![](images/gorgeous_vectors.PNG)
 
 
 
