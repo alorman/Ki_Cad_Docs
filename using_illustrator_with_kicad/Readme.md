@@ -216,8 +216,10 @@ Follow your OS-specific instructions on [Gerbolyze Website](https://github.com/j
 - Now that we have the resultant `myfile.kidcad_mod` file, transfer it back to your working KiCad directory.
 - Add this as a custom footprint location per [directions from KiCad](https://forum.kicad.info/t/library-management-in-kicad-version-5/14636)
 - Place the footprint in PCBnew and admire your gorgeous vectors: ![](images/gorgeous_vectors.PNG)
-
-
+- Additional Bonus:
+  - The lines drawn in Illustrator convey their width without having to be expanded.
+  - In Illustrator ![](images/non_expanded_lines.PNG)
+  - And now in KiCad ![](images/kicad_expanded_footprint.PNG)
 
 
 
