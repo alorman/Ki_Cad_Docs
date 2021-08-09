@@ -188,8 +188,14 @@ Gerobylze is a very capable python tool which can deal with both raster and vect
 My artwork has been native vector, so I'm not using the more advanced raster -> vector features, but they're very comprehensive. Kudos to @jaseg! (Some of the rasterization techniques look similar to [Rasterbater](https://rasterbator.net/) a tool I used in college)
 
 **Installation**
-Gerboylze requires Python and a few dependencies. I ended up installing it on a Raspberry Pi 4 that was handy. You could also build it in an Ubuntu VM.  
+Gerboylze requires Python and a few dependencies. I ended up installing it on a Raspberry Pi 4 that was handy. 
 Follow your OS-specific instructions on [Gerbolyze Website](https://github.com/jaseg/gerbolyze#quick-start-installation)
+
+**NOTE on Ubuntu Installs:**
+I installed per Gerboylyze's Ubuntu instructions in an Ubuntu 20.04 VM.  
+Missing from their documentation:
+- Gerbolyze installs to `~/.local/bin` by default. It can be run with `./.local/bin/gerbolyze`
+- To add it to the PATH directory using `export PATH=~/.local/bin=$PATH` then you can run it from anywhere using `gerbolyze`
 
 **Method**
 - Prep layer names in illustrator 
