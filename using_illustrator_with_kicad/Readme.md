@@ -95,6 +95,11 @@ After opening an SVG that was taken from Illustrators > Inkscape > Save as a new
 So the groups are getting mangled somewhere in Inkscape.  
 These group tags are key to the Gerbolyze process and must be maintained.
 
+### A Bit MORE About SVGs
+The more I dug into the below scaling issues with Illustrator, the more I had to dig into SVGs.  
+The `ViewBox` attribute is key to understanding how SVGs work, although in this case it doesn't help.
+For further reading I encourage you to read this [excellent article](https://css-tricks.com/scale-svg/).  
+
 ## What Are The Other Options?
 I've used and tried the following to make arbitrary vector art PCBs.
 
@@ -200,7 +205,7 @@ Missing from their documentation:
 **Method**
 - Prep layer names in illustrator 
   - Unless you're using the the `-sexp-layer` switch (which will take the entire SVG and put it on one PCB layer)
-  - | Illustrator Layer Name |                           Functional Name                          |
+  - | Illustrator Layer Name (**Case Sensitive**) |                           Functional Name                          |
 	|:----------------------:|:------------------------------------------------------------------:|
 	|          F.Cu          |              Front Copper (Top Layer in Altium-speak)              |
 	|          B.Cu          |                 Back Copper (Back Layer in Alitum)                 |
@@ -216,7 +221,14 @@ Missing from their documentation:
   ![](images/illustrator_layers.PNG]
 - Place the suitable art on each layer. Color does not appear to matter.
 - You don't need to use the `Pathfinder > Union` tool to join all the paths, and you don't need to `Expand` all artwork
+- The artwork should be no stroke color and no stroke weight.
+- You must have a fill color, since there's no stroke. When you highlight the art, it must NOT look like this: ![](images/empty_fill_and_stroke.PNG)
+- If you have artwork that has neither a stroke nor fill (which is possible in Illustrator) you'll likely get an error like this in Gerbolyze: `Warning: clear polarity not supported since KiCAD manages to have an even worse graphics model than gerber, except it can't excuse itself by its age..... -.-`  
+- You may use clipping masks if exporting a smaller section of larger art. These are baked during the SVG conversion, so Gerbolyzer doesn't see any difference. (Author's Note: Clipping masks are both great and terrible)
+- **Note** For reasons I can't explain, the artwork brought through a (AI in mm) to (Rhino in mm) to (SVG in mm) (I know it's SVG mm because the numbers for overall size are correct in plain text) creates the wrong size footprint in KiCad. I've had to scale all art my 0.6611 in Illustrator for the correct size to come through. I've tried the `--scale` switch in Gerbolyze and I can't get any changes when invoking it.
+- **MAJOR GOTCHA** Due to an issue with how Illustrator scales art (which I can't seem to do anything to change), you must scale your art by 0.3527 before export. This may well be something to do with DPI measurements (which SVGs don't specifically have, but most software that imports them does). If you've been using artboards as your crop region for export (a reasonable thing to do. In effect, Illustrator doesn't care about anything other than what's on the artboard) you'll need to scale the art, then the artboard as well. 
 - Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](images/export_for_screens.PNG)
+- Now remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size.
 - Transfer the resulting SVG via sFTP or similar to your VM or Raspi
 - Run `svg-flatten --format kicad --sexp-mod-name TestModule3 --no-flatten /home/pi/name_of_svg.svg /home/pi/name_of_kidcad_file.kicad_mod`
   - Explanation:
