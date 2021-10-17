@@ -252,7 +252,7 @@ You want the following options:
 - `Responsive:` Absolutely not.
 
 - After running with 5 decimal places of export through `Export As` I created an SVG that looks much better:
-![](export_as_no_artifacts.png)
+![](images/export_as_no_artifacts.png)
 
 - Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](images/export_for_screens.png)
 - Now remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size.
