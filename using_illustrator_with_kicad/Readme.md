@@ -218,6 +218,7 @@ Missing from their documentation:
 	|         F.CrtYd        |                            Front Courtyard                         |
 	|         B.CrtYd        |                            Back Courtyard                          |
 	|         Dwgs.User      |     User Drawings (super useful to keeping track of LED numbers    |
+	|        Cmts.User       |                             User Comments                          |
 	|        Edge.Cuts       |                    Edge Cuts (Outline in Altium)                   |
   - You can have additional layer names, but they will be ignored (as long as the `-sexp-layer` isn't thrown). 
 - Your Illustrator layer panel should look something like this:
