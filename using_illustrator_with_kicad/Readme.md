@@ -215,6 +215,9 @@ Missing from their documentation:
 	|         B.SilkS        |                      Back Silk (Back Overlay)                      |
 	|         F.Mask         | Front Solder Mask (remove this if you want copper to show through) |
 	|         B.Mask         |                          Back Solder Mask                          |
+	|         F.CrtYd        |                            Front Courtyard                         |
+	|         B.CrtYd        |                            Back Courtyard                          |
+	|         Dwgs.User      |     User Drawings (super useful to keeping track of LED numbers    |
 	|        Edge.Cuts       |                    Edge Cuts (Outline in Altium)                   |
   - You can have additional layer names, but they will be ignored (as long as the `-sexp-layer` isn't thrown). 
 - Your Illustrator layer panel should look something like this:
@@ -226,7 +229,7 @@ Missing from their documentation:
 - If you have artwork that has neither a stroke nor fill (which is possible in Illustrator) you'll likely get an error like this in Gerbolyze: `Warning: clear polarity not supported since KiCAD manages to have an even worse graphics model than gerber, except it can't excuse itself by its age..... -.-`  
 - You may use clipping masks if exporting a smaller section of larger art. These are baked during the SVG conversion, so Gerbolyzer doesn't see any difference. (Author's Note: Clipping masks are both great and terrible)
 - **Note** For reasons I can't explain, the artwork brought through a (AI in mm) to (Rhino in mm) to (SVG in mm) (I know it's SVG mm because the numbers for overall size are correct in plain text) creates the wrong size footprint in KiCad. I've had to scale all art my 0.6611 in Illustrator for the correct size to come through. I've tried the `--scale` switch in Gerbolyze and I can't get any changes when invoking it.
-- **MAJOR GOTCHA** Due to an issue with how Illustrator scales art (which I can't seem to do anything to change), you must scale your art by 0.3527 before export. This may well be something to do with DPI measurements (which SVGs don't specifically have, but most software that imports them does). If you've been using artboards as your crop region for export (a reasonable thing to do. In effect, Illustrator doesn't care about anything other than what's on the artboard) you'll need to scale the art, then the artboard as well. 
+- **MAJOR GOTCHA** Due to an issue with how Illustrator scales art (which I can't seem to do anything to change), you must scale your art by 35.27% before export. This may well be something to do with DPI measurements (which SVGs don't specifically have, but most software that imports them does). If you've been using artboards as your crop region for export (a reasonable thing to do. In effect, Illustrator doesn't care about anything other than what's on the artboard) you'll need to scale the art, then the artboard as well. 
 - Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](images/export_for_screens.PNG)
 - Now remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size.
 - Transfer the resulting SVG via sFTP or similar to your VM or Raspi
