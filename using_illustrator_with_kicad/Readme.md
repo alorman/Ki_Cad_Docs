@@ -192,8 +192,8 @@ Gerobylze is a very capable python tool which can deal with both raster and vect
 
 My artwork has been native vector, so I'm not using the more advanced raster -> vector features, but they're very comprehensive. Kudos to @jaseg! (Some of the rasterization techniques look similar to [Rasterbater](https://rasterbator.net/) a tool I used in college)
 
-**Installation**
-Gerboylze requires Python and a few dependencies. I ended up installing it on a Raspberry Pi 4 that was handy. 
+### Installation
+Gerboylze requires Python and a few dependencies. I ended up installing it on a Raspberry Pi 4 that was handy. I have also run it on an Ubuntu VM
 Follow your OS-specific instructions on [Gerbolyze Website](https://github.com/jaseg/gerbolyze#quick-start-installation)
 
 **NOTE on Ubuntu Installs:**
@@ -202,7 +202,7 @@ Missing from their documentation:
 - Gerbolyze installs to `~/.local/bin` by default. It can be run with `./.local/bin/gerbolyze`
 - To add it to the PATH directory using `export PATH=~/.local/bin=$PATH` then you can run it from anywhere using `gerbolyze`
 
-**Method**
+### Method
 - Prep layer names in illustrator 
   - Unless you're using the the `-sexp-layer` switch (which will take the entire SVG and put it on one PCB layer)
   - | Illustrator Layer Name (**Case Sensitive**) |                           Functional Name                          |
@@ -253,9 +253,9 @@ You want the following options:
 
 - After running with 5 decimal places of export through `Export As` I created an SVG that looks much better:
 ![](images/export_as_no_artifacts.png)
-
-- Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](images/export_for_screens.png)
-- Now remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size.
+	
+### Now, continuing our journey....
+- Remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size.
 - Transfer the resulting SVG via sFTP or similar to your VM or Raspi
 - Run `svg-flatten --format kicad --sexp-mod-name TestModule3 --no-flatten /home/pi/name_of_svg.svg /home/pi/name_of_kidcad_file.kicad_mod`
   - Explanation:
