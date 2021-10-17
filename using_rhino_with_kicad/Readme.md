@@ -6,6 +6,7 @@ KiCad does not seem to be as flexible as CircuitMaker about how STEP files are b
 
 This method was tested with Rhino 7 SR5 and KiCad 5.1.9-1
 
+# 3d Models with KiCad
 
 ## TL;DR
 KiCad really likes closed, watertight shapes in it's step files if you want the colors to apply.  
@@ -37,4 +38,8 @@ When exporting for KiCad;
 
 Now when opening in KiCad you should see separate colors.
 
+# Exporting SVGs from Rhino -> KiCad
+
+### This doesn't work
+Annoyingly, while Rhino 7 and above can generate SVG outputs, they don't seem to have any layer information. This makes a one-stop import into KiCad or Gerboylze really tricky.
 

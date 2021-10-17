@@ -18,10 +18,10 @@ I wanted to do the following with my PCB:
 
 Your mileage may vary, but I will share what did and didn't work.  
 
-## A Bit About SVGs
+## A Bit About SVGs (More about SVGs than you ever wanted to know...)
 SVGs are not all created equal. Illustrator and [Rhino](www.rhino3d.com) seem to be largely compatible in their handling of SVGs (although Rhino does not acknowle line width, which is odd). Inkscape very much *does NOT* treat these the same way.   
 **SVGs cannot contain layers.** But instead contain groups (which can be mapped roughly from layers to groups when exporting from Rhino or Illustrator). Rhino treats these as native groups:
-![](images/svg_groups.PNG)
+![](images/svg_groups.png)
 
 The group name is embedded in the SVG as the following:
 ```
@@ -137,14 +137,14 @@ In my limited testing I've found the following:
 As with a lot of software, there is more than one way to skin a cat (just a phrase. I love cats). I will outline all the methods I tried that **didn't** work in addition to the final one that did. 
 
 ### KiCad Convert Image Tool
-![](images/convert_image.PNG)
+![](images/convert_image.png)
 This is KiCad's built-in method for converting raster art to footprints and logos. It produces a `kicad_mod` file that can be placed in a custom library.
 
 **Limitations**
 - **This tool will not place an object onto the copper, paste or mask layers** (this rules it out for what I want to do)
 - It is DPI dependent, rely on rasters for input. For a large board you will end up with inaccuracies or lost detail.
-- This is what you end up with, for large and detailed artwork: ![](images/too_low_dpi.PNG)
-- It should look like: ![](images/footprint_editor.PNG)
+- This is what you end up with, for large and detailed artwork: ![](images/too_low_dpi.png)
+- It should look like: ![](images/footprint_editor.png)
 
 ### [SVG Path to Kicad Online](http://kicad.feldoncentral.com/svg2kicad/svg2kicad.php)
 I tried this but couldn't make it work with SVGs coming out of Illustrator, due to Illustrator and Inkscape having very different ideas about how to handle SVGs.
@@ -222,33 +222,56 @@ Missing from their documentation:
 	|        Edge.Cuts       |                    Edge Cuts (Outline in Altium)                   |
   - You can have additional layer names, but they will be ignored (as long as the `-sexp-layer` isn't thrown). 
 - Your Illustrator layer panel should look something like this:
-  ![](images/illustrator_layers.PNG]
+  ![](images/illustrator_layers.png]
 - Place the suitable art on each layer. Color does not appear to matter.
 - You don't need to use the `Pathfinder > Union` tool to join all the paths, and you don't need to `Expand` all artwork
 - The artwork should be no stroke color and no stroke weight.
-- You must have a fill color, since there's no stroke. When you highlight the art, it must NOT look like this: ![](images/empty_fill_and_stroke.PNG)
+- You must have a fill color, since there's no stroke. When you highlight the art, it must NOT look like this: ![](images/empty_fill_and_stroke.png)
 - If you have artwork that has neither a stroke nor fill (which is possible in Illustrator) you'll likely get an error like this in Gerbolyze: `Warning: clear polarity not supported since KiCAD manages to have an even worse graphics model than gerber, except it can't excuse itself by its age..... -.-`  
 - You may use clipping masks if exporting a smaller section of larger art. These are baked during the SVG conversion, so Gerbolyzer doesn't see any difference. (Author's Note: Clipping masks are both great and terrible)
+
+### MAJOR GOTCHAS
 - **Note** For reasons I can't explain, the artwork brought through a (AI in mm) to (Rhino in mm) to (SVG in mm) (I know it's SVG mm because the numbers for overall size are correct in plain text) creates the wrong size footprint in KiCad. I've had to scale all art my 0.6611 in Illustrator for the correct size to come through. I've tried the `--scale` switch in Gerbolyze and I can't get any changes when invoking it.
 - **MAJOR GOTCHA** Due to an issue with how Illustrator scales art (which I can't seem to do anything to change), you must scale your art by 35.27% before export. This may well be something to do with DPI measurements (which SVGs don't specifically have, but most software that imports them does). If you've been using artboards as your crop region for export (a reasonable thing to do. In effect, Illustrator doesn't care about anything other than what's on the artboard) you'll need to scale the art, then the artboard as well. 
-- Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](images/export_for_screens.PNG)
+
+### About `Export for Screens`
+- While normally `Export for Screens` in Illustrator is an excellent way to keep track of your artboards, and multiple exports. I've found, in cases of complex graphics, that it does offer enough control over the output. 
+- On complex artwork (roughly 1MB or larger, anecdotally) `Export for Screens` creates very strange artifacts:
+![](images/not_enough_resolution_svg.png)
+(this was exported from Illustrator using `Export for Screens` then opened in Rhino for clarity. It loads in Gerbolyze the same way.
+
+So far the workaround seems to be using `Export As` then selecting `SVG`. This will present you with the following dialogue:
+![](images/export_as_options.png)
+You want the following options:
+- `Styling:` (Doesn't seem to matter)
+- `Font:` If you'd like to have nice outlined fonts, use `Convert to Outlines` Gerbolyze doesn't read native text objects in SVGs.
+- `Images:` You really shouldn't have any images at this point
+- `Object IDs:` Definitely keep as `Layer Names`
+- `Decimal:` Turning this up to 5-8 creates larger and more detailed files than `Export for Screens`. Gerboylze has said 8 decimal places can cause problems, so run a test first.
+- `Minify`: No
+- `Responsive:` Absolutely not.
+
+- After running with 5 decimal places of export through `Export As` I created an SVG that looks much better:
+![](export_as_no_artifacts.png)
+
+- Use the `Export for Screens` dialogue to export the displayed artwork as you want it into an `SVG` file type. Like this: ![](images/export_for_screens.png)
 - Now remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size.
 - Transfer the resulting SVG via sFTP or similar to your VM or Raspi
 - Run `svg-flatten --format kicad --sexp-mod-name TestModule3 --no-flatten /home/pi/name_of_svg.svg /home/pi/name_of_kidcad_file.kicad_mod`
   - Explanation:
     - `--Format kicad` specifies that you'd like the resultant file in kicad_mod type
-	- `--sexp-mod-name` specifies the module reference in KiCad. This seems like it can be arbitrary and not globally unique, but **must** be specified. For manifestation in KiCad see: ![](test_module_3.PNG)
+	- `--sexp-mod-name` specifies the module reference in KiCad. This seems like it can be arbitrary and not globally unique, but **must** be specified. For manifestation in KiCad see: ![](test_module_3.png)
 	- `--no-flatten` this disables the flattening algorithm. This is largely similar to doing the `Pathfinder > Union` command in Illustrator or the `booleancurve` command in Rhino. **When this flag wasn't thrown, svg-flatten` would run but produce a 1k file containing  nothing.** Through anecdotal testing in KiCad, it seems that even un-unioned artwork imports well. 
-	  - Un-unioned art in Illustrator: ![](images/illustrator_unmerged.PNG)
-	  - Imported through this process to KiCad. It has created the same overlapping areas on layer `F.SilkS`. Most fab shops should be fine with this overlap: ![](images/footprint_editor.PNG)
+	  - Un-unioned art in Illustrator: ![](images/illustrator_unmerged.png)
+	  - Imported through this process to KiCad. It has created the same overlapping areas on layer `F.SilkS`. Most fab shops should be fine with this overlap: ![](images/footprint_editor.png)
 	- You could always union the artwork in pre-processing.
 - Now that we have the resultant `myfile.kidcad_mod` file, transfer it back to your working KiCad directory.
 - Add this as a custom footprint location per [directions from KiCad](https://forum.kicad.info/t/library-management-in-kicad-version-5/14636)
-- Place the footprint in PCBnew and admire your gorgeous vectors: ![](images/gorgeous_vectors.PNG)
+- Place the footprint in PCBnew and admire your gorgeous vectors: ![](images/gorgeous_vectors.png)
 - Additional Bonus:
   - The lines drawn in Illustrator convey their width without having to be expanded.
-  - In Illustrator ![](images/non_expanded_lines.PNG)
-  - And now in KiCad ![](images/kicad_expanded_footprint.PNG)
+  - In Illustrator ![](images/non_expanded_lines.png)
+  - And now in KiCad ![](images/kicad_expanded_footprint.png)
 
 
 
