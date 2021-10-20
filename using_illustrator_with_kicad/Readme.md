@@ -259,7 +259,7 @@ You want the following options:
 - Transfer the resulting SVG via sFTP or similar to your VM or Raspi
 - Run `svg-flatten --format kicad --sexp-mod-name TestModule3 --no-flatten /home/pi/name_of_svg.svg /home/pi/name_of_kidcad_file.kicad_mod`
   - Explanation:
-    - `--Format kicad` specifies that you'd like the resultant file in kicad_mod type
+    - `--format kicad` specifies that you'd like the resultant file in kicad_mod type
 	- `--sexp-mod-name` specifies the module reference in KiCad. This seems like it can be arbitrary and not globally unique, but **must** be specified. For manifestation in KiCad see: ![](test_module_3.png)
 	- `--no-flatten` this disables the flattening algorithm. This is largely similar to doing the `Pathfinder > Union` command in Illustrator or the `booleancurve` command in Rhino. **When this flag wasn't thrown, svg-flatten` would run but produce a 1k file containing  nothing.** Through anecdotal testing in KiCad, it seems that even un-unioned artwork imports well. 
 	  - Un-unioned art in Illustrator: ![](images/illustrator_unmerged.png)
@@ -273,5 +273,14 @@ You want the following options:
   - In Illustrator ![](images/non_expanded_lines.png)
   - And now in KiCad ![](images/kicad_expanded_footprint.png)
 
+### Adding Pad Designators
+- Now that we have our layer-sorted vectors in KiCad, open footprint editor
+- Add an SMT pad to "anchor" (KiCad's terminology) each copper island. These should be directly overlapping. **You must have one pad per isolated copper if you want to assign it a pin number**
+- Like this:
+![](images/smt_pad.png)
+- Now select both the pad and the imported are, right click and press `Create Pad from Selected Shapes` like this:
+![](images/pad_from_selected.png)
+- Now we can use our normal fill and intelligently merge copper areas like this (note: selecting pads vs whole components can be a pain for oddly shaped components):
+![](images/pour_test.png)
 
 
