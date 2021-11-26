@@ -233,7 +233,7 @@ Missing from their documentation:
 
 ### MAJOR GOTCHAS
 - **Note** For reasons I can't explain, the artwork brought through a (AI in mm) to (Rhino in mm) to (SVG in mm) (I know it's SVG mm because the numbers for overall size are correct in plain text) creates the wrong size footprint in KiCad. I've had to scale all art my 0.6611 in Illustrator for the correct size to come through. I've tried the `--scale` switch in Gerbolyze and I can't get any changes when invoking it.
-- **MAJOR GOTCHA** Due to an issue with how Illustrator scales art (which I can't seem to do anything to change), you must scale your art by 35.27% before export. This may well be something to do with DPI measurements (which SVGs don't specifically have, but most software that imports them does). **If you've been using artboards as your crop region for export (a reasonable thing to do. In effect, Illustrator doesn't care about anything other than what's on the artboard) you'll need to scale the art, then the artboard as well.** If your art is fully contianed by an artboard (and is fully contained by your `Edge.Cuts` layer you can export the scaled down version of the art and untick `Use Artboards` From the `Export for Screens` dialogue. The export will be the extents of your `Edge.Cuts` geometry
+- **MAJOR GOTCHA** Due to an issue with how Illustrator scales art (which I can't seem to do anything to change), you must scale your art by 35.2858% before export. This may well be something to do with DPI measurements (which SVGs don't specifically have, but most software that imports them does). **If you've been using artboards as your crop region for export (a reasonable thing to do. In effect, Illustrator doesn't care about anything other than what's on the artboard) you'll need to scale the art, then the artboard as well.** If your art is fully contianed by an artboard (and is fully contained by your `Edge.Cuts` layer you can export the scaled down version of the art and untick `Use Artboards` From the `Export for Screens` dialogue. The export will be the extents of your `Edge.Cuts` geometry
 
 ### About `Export for Screens`
 - While normally `Export for Screens` in Illustrator is an excellent way to keep track of your artboards, and multiple exports. I've found, in cases of complex graphics, that it does offer enough control over the output. 
@@ -250,7 +250,7 @@ You want the following options:
 - `Object IDs:` Definitely keep as `Layer Names`
 - `Decimal:` Turning this up to 5-8 creates larger and more detailed files than `Export for Screens`. Gerboylze has said 8 decimal places can cause problems, so run a test first.
 - `Minify`: No
-- `Responsive:` Absolutely not.
+- `Responsive:` Absolutely not. This doesn't write a `ViewBox` tag to the SVG.
 
 - After running with 5 decimal places of export through `Export As` I created an SVG that looks much better:
 ![](images/export_as_no_artifacts.png)
