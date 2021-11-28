@@ -330,6 +330,7 @@ Pick:
 - `Decimal Places`: `7` 
 - `Responsive`: `No`
 
+- Another Note: If must set all layers to visible. If they're not visible, they will still be exported, but Gerbolyze won't read them.
 
 - After running with 5 decimal places of export through `Export As` I created an SVG that looks much better:
 ![](images/export_as_no_artifacts.png)
