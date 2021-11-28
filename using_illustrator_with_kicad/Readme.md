@@ -275,6 +275,26 @@ Missing from their documentation:
 - Gerbolyze installs to `~/.local/bin` by default. It can be run with `./.local/bin/gerbolyze`
 - To add it to the PATH directory using `export PATH=~/.local/bin=$PATH` then you can run it from anywhere using `gerbolyze`
 
+**Compiling from source:**
+I had to run the following commmands to compile from source in Ubuntu 20.04 in a venv:
+```
+git clone --recurse-submodules https://git.jaseg.de/gerbolyze.git
+cd gerbolyze
+
+pip3 install --user git+https://git.jaseg.de/pcb-tools-extension.git
+python3 -m venv /path/to/venv
+source /path/to/vm/bin/activate
+
+pip3 install pcb-tools-extension
+pip3 install click
+pip3 install lxml
+pip3 insall numpy
+
+python3 setup.py install
+```
+(Author's Note: Yay submodules!)
+
+
 ### Method
 - Prep layer names in illustrator 
   - Unless you're using the the `-sexp-layer` switch (which will take the entire SVG and put it on one PCB layer)
