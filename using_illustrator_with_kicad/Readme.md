@@ -28,7 +28,7 @@ The group name is embedded in the SVG as the following:
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1417.32 1417.32"><defs><style>.cls-1,.cls-5,.cls-6,.cls-7{fill:#231f20;}.cls-2{fill:#a5a4a4;}.cls-3,.cls-4{fill:#fff;}.cls-4,.cls-5{fill-rule:evenodd;}.cls-6{stroke:#231f20;}.cls-10,.cls-11,.cls-12,.cls-13,.cls-6,.cls-7,.cls-8,.cls-9{stroke-miterlimit:10;}.cls-6,.cls-7,.cls-9{stroke-width:0.75px;}.cls-10,.cls-11,.cls-12,.cls-7,.cls-8,.cls-9{stroke:#fff;}.cls-10,.cls-11,.cls-12,.cls-13,.cls-8,.cls-9{fill:none;}.cls-8{stroke-width:3px;}.cls-11{stroke-width:0.5px;}.cls-12{stroke-width:3.7px;}.cls-13{stroke:#a5a4a4;}</style></defs><g id="Black_Underlay" data-name="Black Underlay"><rect class="cls-1" width="1417.32" height="1417.32"/></g><g id="F.Cu"><polygon class="cls-2" points="136.95 478.91 118.42 478.91 84.5 445 39.28 445 39.28 475.15 84.5 475.15 114.65 505.3 136.95 505.3 136.95 478.91"/><polygon class="cls-2" points="364.76 552.62 291.78 478.91 148.88 478.91 148.88 505.3 281.42 505.3 347.31 570.74 364.76 552.62"/><path class="cls-2" d="M600.23,815.26a2.08,2.08,0,1,0-.26,2.63A1.77,1.77,0,0,0,600.23,815.26Z"/><path class="cls-2" d="M608.68,827c-.49-.34-1-.55-1.45-.08s-.21.91.18,1.29a1.42,1.42,0,0,0,2,.3l.64-.63A4.53,4.53,0,0,1,608.68,827Z"/><path class="cls-2" d=.........
 ```
 
-This export was done through the below `Export for Screens` method from Adobe Illustrator. Illustrator has changed the layers to groups i.e. `<g id="F.Cu">` represents the starting tag of a new group. 
+This export was done through the below `Export for Screens` method from Adobe Illustrator (**Update:** Use `SaveAs` instead). Illustrator has changed the layers to groups i.e. `<g id="F.Cu">` represents the starting tag of a new group. 
 
 After opening an SVG that was taken from Illustrators > Inkscape > Save as a new SVG the groups are lost. While they still exist in the SVG, there seem to be no members within each group. The artifact looks the following at the very end of the SVG:
 ```
@@ -100,6 +100,79 @@ The more I dug into the below scaling issues with Illustrator, the more I had to
 The `ViewBox` attribute is key to understanding how SVGs work, although in this case it doesn't help.
 For further reading I encourage you to read this [excellent article](https://css-tricks.com/scale-svg/).  
 
+## Adobe Illustrator and SVGs
+**Significant Update**
+If any of the devs for SVG export for Illustrator ever read this....I have questions for you.....So many questions.
+
+### Illustrator and SVGs Units
+Illustrator seems to have no consistency in SVG units. They certainly don't correlate to any of the selected units in `Document Setup`.  
+I've encountered Illustrator SVG exports in both Points, Inches, Pixels and no units specified. It **seems** to default to Points. It's frustrating.  
+The units from `Document Settings` are embedded in the initial `width` and `height` tags, but nowhere else. Despite the call of a specific unit, the file itself will be in Points or px. Example of art this is 500x500mm with `Document Settings` set to mm:  
+```
+<svg xmlns="http://www.w3.org/2000/svg" width="500.35277mm" height="500.3528mm" viewBox="0 0 1418.3228 1418.3229">
+<g id="Edge.Cuts">
+    <rect class="cls-1" x="0.5" y="0.5" width="1417.3228" height="1417.3229"/>
+```
+So, in the above, it's defining the `width` and `height` in mm, but the viewbox (the artboard) is in Points. The Edge.Cuts box is also defined in points. **Changing the Document Settings units does nothing to change this**.
+
+### Do Artboards Mattter?
+**Yes.**  
+Initially I thought they didn't but when you're scaling things around, the artboard is translated to the `viewbox` tag and is key going into Gerbolyze.  
+Make your artboard the size of your PCB (after you scale it down, because Points to mm).
+
+### Illustrator And The Three Ways Of Exporting SVGs
+Illustrator can export SVGs in the following ways:
+- `Export for Screens` (great, I guess, if you're doing a ton of artboards)
+- `Export As` (Basically the same, just single-shot)
+- `Save As` (**Totally not the same as the others**)
+
+Export for Screens:
+![](images/export_for_screens.png)
+
+Export As:
+![](images/export_as_options.png)
+
+Save As:
+![](images/save_as_options.png)
+
+### Decimal Precision
+In all the above dialogues you're prompted for the SVG precision (how much floating point accuracy you want).  
+**Only `SaveAs` seems to accept a number larger than 5**  
+This seems to be a bug, but it's annoying.  
+I've been using 7 as my preferred export precision.  
+
+### Compound Shapes
+I've had a few instances where Gerboylze simply hangs, using 100 percent CPU, at the following dialogue:
+```
+copying svg input into temp svg
+calling usvg on "/tmp/filei7vDix.svg" and "/tmp/filezsxHfy.svg"
+parsed 0 vectorizers
+Loading temporary file "/tmp/filezsxHfy.svg"
+loaded viewbox: 0, 0, 500.003, 500.003
+document viewbox clip: bbox={0, 0} - {5000031433, 5000031738}
+Rejecting layer ""
+Forwarding layer name to sink: "Edge.Cuts"
+Setting S-Exp export layer to "Edge.Cuts"
+Setting S-Exp export layer to ""
+Forwarding layer name to sink: "F.Cu"
+Setting S-Exp export layer to "F.Cu"
+Setting S-Exp export layer to ""
+Forwarding layer name to sink: "F.Mask"
+Setting S-Exp export layer to "F.Mask"
+Setting S-Exp export layer to ""
+Forwarding layer name to sink: "F.SilkS"
+Setting S-Exp export layer to "F.SilkS"
+```
+No amount of time makes it clear the jam. In practice, if it takes more than a few seconds, it has likely hung.  
+After deleting sections of my art, exporting again, and testing, I determined that compound paths can cause trouble. I experiment by putting geometry on different layers, to isolate exactly which geometry was causing problems. It will happen on problem vectors on any layer, mine just happened to be on F.SilkS.
+Deleting the path made Gerbolyze work just fine. Re-compounding the paths also worked. Not every compound path caused problems, just one. It was very strange.  
+If you're having trouble with Gerbolyze hanging up:
+- Try editing your compound paths
+- Release your clipping masks
+- Expand your live paint groups
+- Make sure you set `Type` to `Convert to Outline` at SVG export  
+
+Now back to our normal programming...
 ## What Are The Other Options?
 I've used and tried the following to make arbitrary vector art PCBs.
 
@@ -224,23 +297,27 @@ Missing from their documentation:
 - Your Illustrator layer panel should look something like this:
   ![](images/illustrator_layers.png]
 - Place the suitable art on each layer. Color does not appear to matter.
-- You don't need to use the `Pathfinder > Union` tool to join all the paths, and you don't need to `Expand` all artwork
+- You don't need to use the `Pathfinder > Union` tool to join all the paths (but you probably should), and you don't need to `Expand` all artwork
 - The artwork should be no stroke color and no stroke weight.
 - You must have a fill color, since there's no stroke. When you highlight the art, it must NOT look like this: ![](images/empty_fill_and_stroke.png)
 - If you have artwork that has neither a stroke nor fill (which is possible in Illustrator) you'll likely get an error like this in Gerbolyze: `Warning: clear polarity not supported since KiCAD manages to have an even worse graphics model than gerber, except it can't excuse itself by its age..... -.-`  
 - You may use clipping masks if exporting a smaller section of larger art. These are baked during the SVG conversion, so Gerbolyzer doesn't see any difference. (Author's Note: Clipping masks are both great and terrible)
 
-### MAJOR GOTCHAS
-- **Note** For reasons I can't explain, the artwork brought through a (AI in mm) to (Rhino in mm) to (SVG in mm) (I know it's SVG mm because the numbers for overall size are correct in plain text) creates the wrong size footprint in KiCad. I've had to scale all art my 0.6611 in Illustrator for the correct size to come through. I've tried the `--scale` switch in Gerbolyze and I can't get any changes when invoking it.
-- **MAJOR GOTCHA** Due to an issue with how Illustrator scales art (which I can't seem to do anything to change), you must scale your art by 35.27% before export. This may well be something to do with DPI measurements (which SVGs don't specifically have, but most software that imports them does). If you've been using artboards as your crop region for export (a reasonable thing to do. In effect, Illustrator doesn't care about anything other than what's on the artboard) you'll need to scale the art, then the artboard as well. 
+### Scaling Artwork Before Export
+See above about how Illustrator deals with SVG scale. 
+You **MUST** do the following before proceeding to the export step:
+- Select all vectors
+- `Object > Transform > Scale` with a scale factor of 35.278% (Illustrator won't accept a fourth decimal place). This number is: Points to mm conversion.
+- Then re-adjust the artboard to match your `Edge.Cuts` layer. 
 
-### About `Export for Screens`
+
+### About `Export for Screens` (And Why You Should Use SaveAs Instead)
 - While normally `Export for Screens` in Illustrator is an excellent way to keep track of your artboards, and multiple exports. I've found, in cases of complex graphics, that it does offer enough control over the output. 
-- On complex artwork (roughly 1MB or larger, anecdotally) `Export for Screens` creates very strange artifacts:
+- **Update, this still applies** On complex artwork (roughly 1MB or larger, anecdotally) `Export for Screens` creates very strange artifacts:
 ![](images/not_enough_resolution_svg.png)
 (this was exported from Illustrator using `Export for Screens` then opened in Rhino for clarity. It loads in Gerbolyze the same way.
 
-So far the workaround seems to be using `Export As` then selecting `SVG`. This will present you with the following dialogue:
+~~So far the workaround seems to be using `Export As` then selecting `SVG`. This will present you with the following dialogue:
 ![](images/export_as_options.png)
 You want the following options:
 - `Styling:` (Doesn't seem to matter)
@@ -249,13 +326,27 @@ You want the following options:
 - `Object IDs:` Definitely keep as `Layer Names`
 - `Decimal:` Turning this up to 5-8 creates larger and more detailed files than `Export for Screens`. Gerboylze has said 8 decimal places can cause problems, so run a test first.
 - `Minify`: No
-- `Responsive:` Absolutely not.
+- `Responsive:` Absolutely not.~~
+
+**Update**
+Use the following to have high-decimal control over your SVG export. 
+- `File > SaveAs` then select SVG:
+![](images/save_as_dialogue.png)
+- You should then have the following options:
+![](images/save_as_options.png)
+Pick:
+- `SVG Profile`: `SVG 1.1`
+- `Type`: `Convert to Outline`
+- `Preserve Illustrator Editing Capabilities` unticked. I'm not entirely sure what this does.
+- `Decimal Places`: `7` 
+- `Responsive`: `No`
+
 
 - After running with 5 decimal places of export through `Export As` I created an SVG that looks much better:
 ![](images/export_as_no_artifacts.png)
 	
 ### Now, continuing our journey....
-- Remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size.
+- Remember to un-scale your art in Illustrator so that everything isn't permanently the wrong size when you save.
 - Transfer the resulting SVG via sFTP or similar to your VM or Raspi
 - Run `svg-flatten --format kicad --sexp-mod-name TestModule3 --no-flatten /home/pi/name_of_svg.svg /home/pi/name_of_kidcad_file.kicad_mod`
   - Explanation:
