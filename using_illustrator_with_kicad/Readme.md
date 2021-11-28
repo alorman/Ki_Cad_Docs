@@ -317,17 +317,6 @@ You **MUST** do the following before proceeding to the export step:
 ![](images/not_enough_resolution_svg.png)
 (this was exported from Illustrator using `Export for Screens` then opened in Rhino for clarity. It loads in Gerbolyze the same way.
 
-~~So far the workaround seems to be using `Export As` then selecting `SVG`. This will present you with the following dialogue:
-![](images/export_as_options.png)
-You want the following options:
-- `Styling:` (Doesn't seem to matter)
-- `Font:` If you'd like to have nice outlined fonts, use `Convert to Outlines` Gerbolyze doesn't read native text objects in SVGs.
-- `Images:` You really shouldn't have any images at this point
-- `Object IDs:` Definitely keep as `Layer Names`
-- `Decimal:` Turning this up to 5-8 creates larger and more detailed files than `Export for Screens`. Gerboylze has said 8 decimal places can cause problems, so run a test first.
-- `Minify`: No
-- `Responsive:` Absolutely not.~~
-
 **Update**
 Use the following to have high-decimal control over your SVG export. 
 - `File > SaveAs` then select SVG:
