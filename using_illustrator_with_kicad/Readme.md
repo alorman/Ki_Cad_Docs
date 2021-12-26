@@ -298,6 +298,7 @@ python3 setup.py install
 ### Method
 - Prep layer names in illustrator 
   - Unless you're using the the `-sexp-layer` switch (which will take the entire SVG and put it on one PCB layer)
+  - You **MUST** change the layer names in Illustrator before you save it to an SVG using the `Save As` function, otherwise group/layer names will not work well. This seems to be a feature/bug within Illustrator.
   - | Illustrator Layer Name (**Case Sensitive**) |                           Functional Name                          |
 	|:----------------------:|:------------------------------------------------------------------:|
 	|          F.Cu          |              Front Copper (Top Layer in Altium-speak)              |
